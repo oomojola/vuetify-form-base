@@ -3,8 +3,8 @@
   "version": "0.3.2",
   "description": "Form-Generator as Vue-Component using Vuetify 2.0",
   "main": "index.js",
-  "module": "umd/vFormBase.umd.min.js",
-  "unpkg": "umd/vFormBase.umd.min.js",
+  "___module": "umd/vFormBase.umd.min.js",
+  "___unpkg": "umd/vFormBase.umd.min.js",
   "scripts": {},
   "dependencies": {
     "lodash": "^4.17.19",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wotamann/vuetify-form-base.git"
+    "url": "git+https://https://github.com/oomojola/vuetify-form-base.git"
   },
   "keywords": [
     "vue",
