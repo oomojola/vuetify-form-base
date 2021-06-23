@@ -144,7 +144,7 @@
                   <component
                     :is="checkInternGroupType(obj)"
                     v-bind="bindSchema(obj)"
-                    @click="onEvent($event, obj)"
+                    v-on="getGroupEventHandlers(obj)"
                   >
                     <v-card-title v-if="obj.schema.title">{{obj.schema.title}}</v-card-title>
                     <v-card-subtitle v-if="obj.schema.subtitle">{{obj.schema.subtitle}}</v-card-subtitle>
@@ -687,6 +687,17 @@ export default {
     bindSchema(obj) {   
       return obj.schema
     },              
+    /**
+     * Blanket OnClick handler for groups has unintended side effect of
+     * adding ripples to the v-card entry so we make this opt-in
+     */
+    getGroupEventHandlers(obj){
+        let handlers = {}
+        if(obj.clickable){
+            handlers.click=($event) => onEvent($event, obj)
+        }
+        return handlers
+    },
     suspendClickAppend(obj){
       // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
       return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append'
