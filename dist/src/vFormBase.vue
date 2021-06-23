@@ -124,6 +124,7 @@
                       <v-form-base
                         :id="`${id}-${obj.key}-${idx}`"
                         :model="item"
+                          :strict-schema="strictSchema"
                         :schema="obj.schema.schema"
                         :row="getRowGroupOrArray(obj)"
                         :col="getColGroupOrArray(obj)"
@@ -152,6 +153,7 @@
                     <v-form-base
                       :id="`${id}-${obj.key}`"
                       :model="setValue(obj)"
+                          :strict-schema="strictSchema"
                       :schema="obj.schema.schema"
                       :row="getRowGroupOrArray(obj)"
                       :col="getColGroupOrArray(obj)"
