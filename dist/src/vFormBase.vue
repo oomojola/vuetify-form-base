@@ -591,6 +591,10 @@ export default {
     schema: {
       type: [Object, Array],
       default: () => ({})
+    },
+    strictSchema:{
+      type:Boolean,
+      default:false
     }
   },
   data () {
@@ -1117,7 +1121,7 @@ export default {
         const datObjectContainsTypeKey = (dat[key] && dat[key].type && (sch[key] && sch[key].type))
         const notInstanceOfFileObject = !(dat[key] instanceof File)
 
-        if (bothArray || datObjectWithoutSchemaType || (datObjectContainsTypeKey && notInstanceOfFileObject)) {
+        if (bothArray || datObjectWithoutSchemaType || (!this.scriptSchema && datObjectContainsTypeKey && notInstanceOfFileObject)) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
             data[key + pathDelimiter + ii] = flatData[ii]
