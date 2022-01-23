@@ -660,13 +660,14 @@ export default {
   }, 
   methods: {    
     // MAP TYPE
-    mapTypeToComponent(type) {
-      // merge global registered components into typeToComponent Object
-      const allTypeComponents = { ...typeToComponent, ...Vue.options.components}
-      // const typeToComponent -> maps type to according v-component 
-      // ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
-      return allTypeComponents[type] ? allTypeComponents[type] : `v-${type}`
-    },
+      mapTypeToComponent(type) {
+          // merge global registered components into typeToComponent Object
+          const allTypeComponents = { ...typeToComponent, ...Vue.options.components}
+          let existing  = Vue.options.components[type];
+          // const typeToComponent -> maps type to according v-component 
+          // ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
+          return typeToComponent[type] || existing  || `v-${type}`
+      },
     // CHECK FOR TYPE: DATE, TIME OR COLOR and EXT: TEXT
     isDateTimeColorTypeAndExtensionText(obj){
       return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text' 
