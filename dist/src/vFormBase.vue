@@ -149,21 +149,23 @@
                   >
                     <v-card-title v-if="obj.schema.title">{{obj.schema.title}}</v-card-title>
                     <v-card-subtitle v-if="obj.schema.subtitle">{{obj.schema.subtitle}}</v-card-subtitle>
-
-                    <v-form-base
-                      :id="`${id}-${obj.key}`"
-                      :model="setValue(obj)"
-                          :strict-schema="strictSchema"
-                      :schema="obj.schema.schema"
-                      :row="getRowGroupOrArray(obj)"
-                      :col="getColGroupOrArray(obj)"
-                      :class="`${id}-${obj.key}`"
-                      v-on="$listeners"
-                    >
-                      <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
+                    <v-card-text>
+                        <v-form-base
+                            :id="`${id}-${obj.key}`"
+                            :model="setValue(obj)"
+                            :strict-schema="strictSchema"
+                            :schema="obj.schema.schema"
+                            :row="getRowGroupOrArray(obj)"
+                            :col="getColGroupOrArray(obj)"
+                            :class="`${id}-${obj.key}`"
+                            v-on="$listeners"
+                            >
+                            <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
                       <template v-for="(_, name) in $scopedSlots" #[name]="slotData"><slot :name="name" v-bind= "{ id, obj, index,  ...slotData}" /></template>  
                     
                     </v-form-base>
+                    </v-card-text>
+                    
                   </component>
                 </template>
               <!-- END GROUP | WRAP -->
