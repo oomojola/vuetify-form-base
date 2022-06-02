@@ -9,13 +9,14 @@
     <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
       <!-- Tooltip Wrapper -->
+        <slot v-if="!obj.schema.hidden" :name="getKeyItemPreSlot(obj)" v-bind="{obj,index,id }" ></slot>
       <v-tooltip
         :key="index"
         :disabled="!obj.schema.tooltip"
         v-bind="getShorthandTooltip(obj.schema.tooltip)"
       >
         <template v-slot:activator="{ on }">
-          <v-col
+            <v-col
             v-show="!obj.schema.hidden"
             :key="index"
             v-bind= "getGridAttributes(obj)"
@@ -74,7 +75,8 @@
                     v-bind="bindOptions(option)"
                   >
                     <!-- component doesn't work with #[s]="slotData" " -->
-                    <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, idx, option }"/></template>                    
+                    <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]>
+                        <slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, idx, option }"/></template>                    
                   </v-radio>
                 </v-radio-group>
               <!-- END RADIO -->
@@ -182,7 +184,9 @@
                   @update:active="onEvent({type:'click'}, obj, 'selected' )"
                 >  
                   <!-- works with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index,  ...slotData}" /></template>
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData">
+                      <slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index,  ...slotData}" />
+                  </template>
                 </v-treeview>
               <!-- END TREEVIEW -->
               
@@ -395,7 +399,6 @@
             <slot :name="getTypeBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
             <slot :name="getKeyBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
           </v-col>
-
           <!-- schema.spacer:true - push next item to the right and fill space between items -->
           <v-spacer
             v-if="obj.schema.spacer"
@@ -408,6 +411,7 @@
         </slot>
         <slot :name="getKeyTooltipSlot(obj)" v-bind= "{ obj, index, id }" />
       </v-tooltip>
+      <slot   v-if="!obj.schema.hidden" :name="getKeyItemPostSlot(obj)" v-bind="{obj,index,id }" ></slot>
     </template>
     <!-- FORM-BASE BOTTOM SLOT -->
     <slot :name="getFormBottomSlot()" :id= "id"/>   
@@ -526,6 +530,8 @@
   const arraySlotAppendix = `${slotAppendix}-${arrayClassAppendix}`
   const topSlotAppendix = `${slotAppendix}-${topAppendix}`
   const itemSlotAppendix = `${slotAppendix}-${itemClassAppendix}`
+  const itemSlotPreAppendix = `${slotAppendix}-${itemClassAppendix}-pre`
+  const itemSlotPostAppendix = `${slotAppendix}-${itemClassAppendix}-post`
   const bottomSlotAppendix = `${slotAppendix}-${bottomAppendix}`
   const tooltipSlotAppendix = `${slotAppendix}-${tooltipAppendix}`
   
@@ -601,6 +607,8 @@ export default {
       default:false
     }
   },
+    mounted(){
+    },
   data () {
     return {  
       flatCombinedArray: [],
@@ -801,6 +809,15 @@ export default {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-formbase-address-city'
       return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${keyClassAppendix}`)
     },
+    getKeyItemPreSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-pre-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${itemSlotPreAppendix}-${keyClassAppendix}`)
+    },
+      getKeyItemPostSlot (obj) {
+          // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-post-formbase-address-city'
+          let name= this.getKeyClassNameWithAppendix(obj, `${itemSlotPostAppendix}-${keyClassAppendix}`)
+          return name;
+      },
     getKeyTooltipSlot (obj) {
       // matches Key specific Tooltip | name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-tooltip-key-formbase-address-city'
       return this.getKeyClassNameWithAppendix(obj, `${tooltipSlotAppendix}-${keyClassAppendix}`)
